@@ -56,4 +56,13 @@ Java_amirz_dngprocessor_parser_TinyDNG_readDNGImage(JNIEnv *env, jclass clazz, j
         }
     }
 
+    for (auto image : images) {
+        image.data.clear();
+        image.strip_byte_counts.clear();
+        image.strip_offsets.clear();
+        image.custom_fields.clear();
+        image.opcodelist1_gainmap.clear();
+        image.opcodelist2_gainmap.clear();
+        image.opcodelist3_gainmap.clear();
+    }
 }
