@@ -3,7 +3,6 @@ package amirz.dngprocessor.parser;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.support.media.ExifInterface;
 import android.net.Uri;
 import android.util.Log;
 import android.util.Rational;
@@ -24,13 +23,15 @@ import amirz.dngprocessor.params.SensorParams;
 
 import static amirz.dngprocessor.util.Constants.DIAGONAL;
 
+import androidx.exifinterface.media.ExifInterface;
+
 public class DngParser {
     private static final String TAG = "DngParser";
     private static final int JPEG_QUALITY = 95;
 
     private static int ADD_STEPS = 0;
-    private static int STEP_SAVE = ADD_STEPS++;
-    private static int STEP_META = ADD_STEPS++;
+    private static final int STEP_SAVE = ADD_STEPS++;
+    private static final int STEP_META = ADD_STEPS++;
 
     private final Context mContext;
     private final Uri mUri;
@@ -52,6 +53,7 @@ public class DngParser {
         Preferences pref = Preferences.global();
 
         ByteReader.ReaderWithExif reader = ByteReader.fromUri(mContext, mUri);
+        assert reader != null;
         Log.e(TAG, "Starting processing of " + mFile + " (" + mUri.getPath() + ") size " +
                 reader.length);
 
@@ -270,7 +272,6 @@ public class DngParser {
         NotifHandler.progress(mContext, steps[0] + ADD_STEPS, steps[0] + ADD_STEPS);
     }
 
-    @SuppressWarnings("deprecation")
     private static void copyAttributes(ExifInterface oldExif, ExifInterface newExif) {
         String[] tags = {
                 ExifInterface.TAG_ORIENTATION,
@@ -290,7 +291,7 @@ public class DngParser {
         }
     }
 
-    private class ParseException extends RuntimeException {
+    private static class ParseException extends RuntimeException {
         private ParseException(String s) {
             super(s);
         }

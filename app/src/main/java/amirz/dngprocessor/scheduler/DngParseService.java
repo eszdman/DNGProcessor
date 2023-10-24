@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -20,6 +19,8 @@ import amirz.dngprocessor.util.Utilities;
 import amirz.dngprocessor.parser.DngParser;
 
 import static amirz.dngprocessor.util.Utilities.ATLEAST_OREO;
+
+import org.jetbrains.annotations.Nullable;
 
 public class DngParseService extends IntentService {
     private static final String TAG = "DngParseService";

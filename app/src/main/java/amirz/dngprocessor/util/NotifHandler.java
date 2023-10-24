@@ -29,7 +29,7 @@ public class NotifHandler {
     }
 
     public static void create(Service service, String name) {
-        PendingIntent pendingIntent = PendingIntent.getActivity(service, 0, new Intent(), 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(service, 0, new Intent(), PendingIntent.FLAG_IMMUTABLE);
         if (ATLEAST_OREO) {
             mBuilder = new Notification.Builder(service, CHANNEL);
         } else {

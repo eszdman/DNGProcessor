@@ -2,7 +2,8 @@ package amirz.dngprocessor.parser;
 
 import android.content.Context;
 import android.net.Uri;
-import android.support.media.ExifInterface;
+
+import androidx.exifinterface.media.ExifInterface;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
