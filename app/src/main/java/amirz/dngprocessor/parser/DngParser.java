@@ -11,6 +11,7 @@ import android.util.SparseArray;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 import amirz.dngprocessor.pipeline.StagePipeline;
 import amirz.dngprocessor.util.NotifHandler;
@@ -91,23 +92,37 @@ public class DngParser {
         // Continue image parsing.
         sensor.inputHeight = getTag(tags, TIFF.TAG_ImageLength).getInt();
         sensor.inputWidth = getTag(tags, TIFF.TAG_ImageWidth).getInt();
+        Log.d(TAG,"size:"+ Arrays.toString(new int[]{sensor.inputWidth, sensor.inputHeight}));
 
+
+
+        byte[] rawImageInput = new byte[sensor.inputWidth * sensor.inputHeight * 2];
+        ByteBuffer dng = ByteBuffer.allocateDirect(wrap.capacity());
+        //dng.position(0);
+        wrap.position(0);
+        dng.put(wrap);
+        dng.position(0);
+        ByteBuffer read = ByteBuffer.allocateDirect(sensor.inputWidth * sensor.inputHeight * 2);
+        TinyDNG.LoadLibrary();
+        TinyDNG.readDNGImage(dng,read);
+        /*
         int[] stripOffsets = getTag(tags, TIFF.TAG_StripOffsets).getIntArray();
+        Log.d(TAG,"stripOffsets:"+ Arrays.toString(stripOffsets));
         int[] stripByteCounts = getTag(tags, TIFF.TAG_StripByteCounts).getIntArray();
-
+        Log.d(TAG,"stripByteCounts:"+ Arrays.toString(stripByteCounts));
         if (stripOffsets.length != stripByteCounts.length) {
             throw new RuntimeException("StripOffsets was not equal to StripByteCounts");
         }
 
-        sensor.inputStride = stripByteCounts[0];
-
-        byte[] rawImageInput = new byte[sensor.inputWidth * sensor.inputHeight * 2];
         int rawImageOffset = 0;
         for (int i = 0; i < stripOffsets.length; i++) {
             ((ByteBuffer) wrap.position(stripOffsets[i]))
                     .get(rawImageInput, rawImageOffset, stripByteCounts[i]);
             rawImageOffset += stripByteCounts[i];
-        }
+        }*/
+        ((ByteBuffer) read.position(0))
+                .get(rawImageInput, 0, sensor.inputWidth * sensor.inputHeight * 2);
+        sensor.inputStride = sensor.inputWidth * sensor.inputHeight * 2;
 
         sensor.cfaVal = getTag(tags, TIFF.TAG_CFAPattern).getByteArray();
         sensor.cfa = CFAPattern.get(sensor.cfaVal);
