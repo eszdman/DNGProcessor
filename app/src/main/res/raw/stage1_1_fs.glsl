@@ -1,7 +1,7 @@
 #version 300 es
 
-precision mediump float;
-precision mediump usampler2D;
+precision highp float;
+precision highp usampler2D;
 
 uniform usampler2D rawBuffer;
 uniform int rawWidth;
@@ -84,5 +84,5 @@ void main() {
         */
     }
 
-    intermediate = g * (v - bl) / (whiteLevel - bl);
+    intermediate = clamp(g * (v - bl) / (whiteLevel - bl),0.0,1.0);
 }
